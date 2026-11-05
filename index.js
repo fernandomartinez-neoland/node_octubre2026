@@ -4,19 +4,27 @@ import { suma } from "./funciones.js";
 
 // CONFIGURACIONES
 const api = express();
-const port = 3000;
-// me permite leer el json de las peticiones y tambien responder con un json
+
+// esta configuracion permite leer las peticiones como un json y tambien permite devolver un json
 api.use(express.json());
-// APIS
-api.get("", (req, res) => {
-  res.send("lo que nos de la gana");
+
+// APIs
+api.post("/", (req, res) => {
+  console.log(req.body);
+
+  res.send(suma(8, req.body.numB));
 });
 
-api.post("/user", (request, response) => {
-  const numB = request.body.numB;
-  response.send("hola " + suma(4, numB));
+api.get("/multiplicar", (req, res) => {
+  const { a, b } = req.query;
+  const mult = a * b;
+  res.send(`aqui tienes a A: ${a} y aqui tienes a B: ${b} y su multiplicacion es: ${mult}`);
 });
 
-api.listen(port, () => {
-  console.log(`conectado a la url http://localhost:${port}`);
+api.get("/usuarios/:id", (req, res)=>{
+  res.status(403).send( { "idUsuario": req.params.id, "estado": "Activo" })
+})
+
+api.listen(3000, () => {
+  console.log("conectado a la url http://localhost:3000");
 });
